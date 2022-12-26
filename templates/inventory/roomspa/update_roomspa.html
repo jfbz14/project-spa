@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Update {{object}}
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase px-4">Update {{object}}</h5>
+
+                            <div class="flex flex-wrap justify-center">
+                                
+                                <div class="w-52 p-2">
+                                    <label for="{{form.name.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.name.label}}</label>
+                                    {% if form.name.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.name.errors}}</span>
+                                    {%endif%}
+                                    <input type="{{form.name.field.widget.input_type}}" name="{{form.name.name}}" id="{{form.name.name}}" value="{{form.name.value}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                </div>
+                                <div class="w-52 p-2">
+                                    <label for="{{form.stretcher.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.stretcher.label}}</label>
+                                    <input type="{{form.stretcher.field.widget.input_type}}" name="{{form.stretcher.name}}" value="{{form.stretcher.value}}" id="{{form.stretcher.name}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                </div>
+                                <div class="w-52 p-2">
+                                    <label for="{{form.condition.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.condition.label}}</label>
+                                    <input {% if form.condition.value %}checked {%endif%} type="{{form.condition.field.widget.input_type}}" name="{{form.condition.name}}" id="{{form.condition.name}}" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+                                
+                                
+                            </div>
+                                
+                            <div class="p-1">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Update
+                                </button>                               
+                            </div>
+                            <div class="p-1">
+                                <a href="{% url 'inventory:list_roomspa' %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

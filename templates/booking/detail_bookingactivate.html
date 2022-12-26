@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Detail Booking N°{{object}}
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-700 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+                    
+                    <div class="w-full max-w-2xl px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        
+                        <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase">Detail Booking N°{{object}}</h5>
+
+                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-200">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+                                    <tr>
+                                        <th scope="col" class="p-2">
+                                            Profile
+                                        </th>
+                                        <th scope="col" class="p-2">
+                                            Client
+                                        </th>
+                                        <th scope="col" class="p-2">
+                                            Room
+                                        </th>
+                                        <th scope="col" class="p-2">
+                                            Actived
+                                        </th>
+                                        <th scope="col" class="p-2">
+                                            Time
+                                        </th>
+                                        <th scope="col" class="p-2">
+                                            Finalize
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="p-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{object.profile}}
+                                        </th>
+                                        <td class="p-2">                                             
+                                            {{object.client}}
+                                        </td>
+                                        <td class="p-2">
+                                            {{object.room.name}}
+                                        </td>
+                                        <td class="p-2">
+                                            {{object.active.astimezone.time}}
+                                        </td>
+                                        <td class="p-2">
+                                            {{object.time_service|floatformat:0}} min
+                                        </td>
+                                        <td class="p-2">
+                                            {{finalize_time.time}}
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <label class="pt-1 block text-sm font-medium text-gray-900 dark:text-white uppercase">Service</label>
+                        <div class="flex flex-wrap items-stretch justify-center pt-2">
+                        {% for service in service %}
+                           
+                            <div class="w-52 p-1">
+                                <label class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" >
+                                    {{service.name_service}}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        </div>  
+
+                        {% if request.user.profileuser.position == 'masseur' %}
+                        <div class="p-1">
+                            <a href="{% url 'booking:add_serviceaditional_gte' object.id %}" 
+                                class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Add Service
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="p-1">
+                            <a href="{% url 'booking:list_booking_active_gestion' %}" 
+                                class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Back
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="p-1">
+                            <a href="{% url 'booking:finalized_booking' object.id %}" 
+                                class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Finalize
+                            </a>
+                        </div>
+                    </div>   
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

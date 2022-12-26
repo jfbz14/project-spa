@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+List room
+{% endblock content_title %}
+
+{% block content_extra_nav %}
+    <div class="px-1.5">
+        <button data-popover-target="popover-default-room" id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <a href="{% url 'inventory:create_roomspa' %}" class="flex justify-between ">
+                <svg 
+                    class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" 
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" 
+                        clip-rule="evenodd">
+                        
+                    </path>
+                </svg>
+                <span class="text-base text-gray-500 hover:text-gray-500 font-bold px-2 dark:text-white dark:hover:text-white">
+                    Rooms
+                </span>            
+            </a>  
+        </button>
+        <div data-popover id="popover-default-room" role="tooltip" class="inline-block absolute invisible z-10 p-1 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+            <p>Add room</p>
+            <div data-popper-arrow></div>
+        </div>
+    </div>
+{% endblock content_extra_nav %}
+
+{% block content %}
+<div class="w-full max-w-lg justify-center mx-auto" >
+    <form method="GET">   
+    {% csrf_token %}  
+        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="search" id="default-search" value="{{request.GET.search}}" name="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ...">
+            <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-200">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+            <tr>
+                <th scope="col" class="p-2">
+                    Name
+                </th>
+                <th scope="col" class="p-2">
+                    Stretch
+                </th>
+                <th scope="col" class="p-2">
+                    Condition
+                </th>
+                <th scope="col" class="p-2">
+                    Items
+                </th>
+                <th scope="col" class="p-2">
+                    Cost
+                </th>
+                <th scope="col" class="p-2">
+                    Edit
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for field in roomspa %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="p-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{field.name}}
+                </th>
+                <td class="p-2">
+                    {{field.stretcher}}
+                </td>
+                <td class="p-2">
+                    {{field.condition}}
+                </td>
+                <td class="p-2">
+                    <a href="{% url 'inventory:list_item_roomspa' field.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                            </path>
+                        </svg>
+                    </a>
+                </td>
+                <td class="p-2">
+
+                    {% for cost in cost_items_room %}
+                        {% if cost.id_room == field.id %}
+                        $ {{cost.sum_cost|floatformat:0}}
+                        {% endif%}
+                    {% endfor %}    
+                    
+                </td>
+                <td class="p-2">
+                    <a href="{% url 'inventory:update_roomspa' field.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg 
+                        class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                        </path>
+                        </svg>
+                    </a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination text-center py-2">
+    <span class="step-links justify-between">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&search={{request.GET.search}}" 
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            &laquo; first
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}&search={{request.GET.search}}"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            previous
+            </a>
+        {% endif %}
+
+        <span class="current text-sm text-gray-600">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&search={{request.GET.search}}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&search={{request.GET.search}}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+  
+{% endblock content %}
+

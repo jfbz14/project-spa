@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Create item {{service}}
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase px-4">Create item {{room}}</h5>
+
+                            <div class="flex flex-wrap justify-center">
+                                {{form.errors}}
+                                <input type="hidden" name="service" value="{{ service.pk }}" />
+
+                                <div class="w-52 p-2">
+                                    <label for="{{form.article.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.article.label}}</label>
+                                    {% if item_in_use %}                                    
+                                        <span class='text-red-600 text-xs'>{{item_in_use}}</span>
+                                    {%endif%}
+                                    {{form.article}}
+                                </div>
+                                <div class="w-52 p-2">
+                                    <label for="{{form.amount.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.amount.label}}</label>
+                                    <input type="{{form.amount.field.widget.input_type}}" name="{{form.amount.name}}" id="{{form.amount.name}}" value="{{request.POST.amount}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                </div>
+                                
+                            </div>
+                                
+                            <div class="p-1">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Create
+                                </button>                               
+                            </div>
+                            <div class="p-1">
+                                <a href="{% url 'service:list_itemservice' service.id %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

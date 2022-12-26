@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+List datetime
+{% endblock content_title %}
+
+{% block content_extra_nav %}
+    <div class="px-1.5">
+        <button data-popover-target="popover-default-expense" id="theme-toggle" type="button" 
+        class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+            <p class="flex justify-between ">
+                
+                <span class="text-base text-gray-500 hover:text-gray-500 font-bold px-2 dark:text-white dark:hover:text-white">
+                    Datetime
+                </span>            
+            </p>  
+        </button>
+        
+    </div>
+{% endblock content_extra_nav %}
+
+{% block content %}
+ 
+
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-200">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+            <tr>
+                <th scope="col" class="p-2">
+                    Day
+                </th>
+                <th scope="col" class="p-2">
+                    Time start
+                </th>
+                <th scope="col" class="p-2">
+                    time end
+                </th>
+                <th scope="col" class="p-2">
+                    Limit
+                </th>
+                <th scope="col" class="p-2">
+                    Condition
+                </th>
+                <th scope="col" class="p-2">
+                    Edit
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for field in list_date_admin %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="p-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{field.name_day}}
+                </th>
+                <td class="p-2">
+                    {{field.time_start|date:'H:i'}}
+                </td>
+                <td class="p-2">
+                    {{field.time_end|date:'H:i'}}
+                </td>
+                <td class="p-2">
+                    {{field.commission_limit|floatformat:0}}
+                </td>
+                <td class="p-2">
+                    {{field.condition}}
+                </td>
+                <td class="p-2">
+                    <a href="{% url 'administrator:update_admindatetime' field.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        <svg 
+                        class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                        </path>
+                        </svg>
+                    </a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination text-center py-2">
+    <span class="step-links justify-between">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" 
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            &laquo; first
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            previous
+            </a>
+        {% endif %}
+
+        <span class="current text-sm text-gray-600">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+  
+{% endblock content %}

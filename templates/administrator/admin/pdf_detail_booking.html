@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<style>
+    .img-invoice {
+        width: 80px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .head {
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    #invoice thead tr th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        padding-top: 4px;
+    }
+
+    #invoice thead tr {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        background-color: aqua;
+    }
+
+    #invoice tbody tr {
+        padding: 0;
+    }
+
+    .text-center{
+        text-align: center;
+    }
+    .p-p{
+        text-align: center; 
+    }
+    
+</style>
+<body style="background-image: url({{route}}/static/logo/logo.png) ;">
+<img src="{{route}}/static/logo/logo.png" class="img-invoice">
+<p class="head">
+    {{company.name_company}}<br>
+    NIT-{{company.document}}
+</p>
+
+
+<p class="p-p">
+    <b>BOOKING N°:</b> &nbsp;&nbsp;  00{{ booking.id }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>DATE:</b> &nbsp;&nbsp; {{ booking.created}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>CLIENT:</b> &nbsp;&nbsp; {{ booking.client}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>DOCUMENT:</b> &nbsp;&nbsp; {{ booking.client.document_number }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+
+<table id="invoice">
+    <thead >
+    <tr style="background-color: rgb(231, 230, 230); ">
+        <th style="width: 40%;">NAME SERVICE</th>
+        <th style="width: 40%;">TIME</th>
+        <th style="width: 40%;">PROFILE</th>
+        <th style="width: 40%;">ROOM</th>
+        <th style="width: 10%;">PRICE</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for service in service %}
+        <tr style="padding-top: 3px;" >
+            <td>{{service.name_service}}</td>
+            <td>{{service.time_minutes}} min</td>
+            <td>{{booking.profile}}</td>
+            <td >{{booking.room|upper}}</td>
+            <td style="text-align: right;">${{service.price|floatformat}}</td>
+        </tr>
+    {% endfor %}
+    <tr style="border-top: 1px solid black; padding-top: 4px; background-color: rgb(231, 230, 230); ">
+        <td colspan="4"><b>TOTAL</b></td>
+        <td style="text-align: right">${{total_price_sevice|floatformat }}</td>
+    </tr>
+    <tr style="border-top: 1px solid black; padding-top: 4px;">
+        <td colspan="4"><b>PAY METHOD</b></td>
+        <td style="text-align: right">{{payment_method.payment_method }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>DISCOUNT</b></td>
+        <td style="text-align: right">${{ booking.discount }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>TOTAL A PAGAR</b></td>
+        <td style="text-align: right">${{ booking.total_price|floatformat}}</td>
+    </tr>
+    </tbody>
+</table>
+<table style="margin-top: 10px;">
+    <thead>
+    <tr>
+        <th>{{company.phone_number}}&nbsp;&nbsp;-&nbsp;&nbsp;{{company.email}}</th>
+    </tr>
+    <tr>
+        <th>{{company.address}}&nbsp;&nbsp;{{company.city}}-{{company.country}}</th>
+    </tr>
+    </thead>
+</table>
+</body>
+</html>

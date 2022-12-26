@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Create profile
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md">CREATE PROFILE</h5>
+
+                            <div class="flex flex-wrap justify-center">
+                               
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.first_name.label}}
+                                        {% if form.first_name.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.first_name.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.first_name}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.last_name.label}}
+                                        {% if form.last_name.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.last_name.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.last_name}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.username.label}}
+                                        {% if form.username.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.username.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.username}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.password.label}}
+                                        {% if form.password.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.password.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.password}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.password_confirmation.label}}
+                                    </label>
+                                    {{form.password_confirmation}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.email.label}}
+                                        {% if form.email.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.email.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.email}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.address.label}}
+                                        {% if form.address.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.address.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.address}}
+                                </div>
+
+                                <div class="w-52 px-4 py-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.document_type.label}}
+                                        {% if form.document_type.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.document_type.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.document_type}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.document_number.label}}
+                                        {% if form.document_number.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.document_number.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.document_number}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Country
+                                    </label>
+                                    {{form.phone_number.subwidgets.0}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.phone_number.label}}
+                                        {% if form.phone_number.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.phone_number.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.phone_number.subwidgets.1}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.academy.label}}
+                                        {% if form.academy.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.academy.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.academy}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.expiration_date_biosafety.label}}
+                                        {% if form.expiration_date_biosafety.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.expiration_date_biosafety.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.expiration_date_biosafety}}
+                                </div>
+                                
+                                {% if request.user.profileuser.position == 'administrator'%}
+                                    <div class="w-52 p-2">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            {{form.position.label}}
+                                            {% if form.position.errors %}                                    
+                                                <span class='text-red-600 text-xs'>{{form.position.errors}}</span>
+                                            {%endif%}
+                                        </label>
+                                        {{form.position}}
+                                    </div>
+                                {% else %}
+                                    <input type="hidden" name="position" value="masseur" />
+                                {% endif %}
+                            </div>
+                                
+                            <div class="p-1">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Create
+                                </button>                               
+                            </div>
+                            <div class="p-1">
+                                <a href="{% url 'profileuser:list_profile' %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

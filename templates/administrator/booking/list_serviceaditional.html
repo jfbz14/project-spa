@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+List service booking{{booking.id}}
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-700 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+                    
+                    <div class="w-full max-w-2xl px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        
+                        
+                        <div class="flex items-stretch justify-center">
+                            <h5 class="font-medium text-gray-900 dark:text-white shadow-md mb-2 uppercase px-2">
+                                Booking N° {{booking.id}} 
+                                <p class="text-xs leading-none  ">{{booking.position}}</p> 
+                            </h5>  
+                            <h5 class="font-medium text-gray-900 dark:text-white shadow-md mb-2 uppercase px-2">
+                                Client
+                                <p class="text-xs leading-none  ">{{booking.client}}</p> 
+                            </h5>  
+                                                 
+                        </div>
+                        
+                        
+                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-200">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+                                    <tr>
+                                        <th scope="col" class="px-1 py-2">
+                                            Service
+                                        </th>
+
+                                        <th scope="col" class="px-1 py-2">
+                                            Time
+                                        </th>
+                                
+                                        <th scope="col" class="px-1 py-2">
+                                            Price
+                                        </th>
+                                        <th scope="col" class="px-1 py-2">
+                                            Position
+                                        </th>
+                                        <th scope="col" class="px-1 py-2">
+                                            Created
+                                        </th>
+                                        <th scope="col" class="px-1 py-2">
+                                            Modified
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in list_service %}
+                                    <tr class="text-sm bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <th scope="row" class="px-1 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{object.name_service}}
+                                        </th>
+
+                                        <td class="px-1 py-2">
+                                            {{object.time_minutes}}mn
+                                        </td>
+
+                                        <td class="px-1 py-2">
+                                            $ {{object.price|floatformat:0}}
+                                        </td>
+                                        <td class="px-1 py-2">
+                                            {{object.position}}
+                                        </td>
+                                        <td class="px-1 py-2">
+                                            {{object.created|date:'Y-m-d H:i'}}
+                                        </td>
+                                        <td class="px-1 py-2">
+                                            {{object.modified|date:'Y-m-d H:i'}}
+                                        </td>
+                                        
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="pagination text-center py-2">
+                            <span class="step-links justify-between">
+                                {% if page_obj.has_previous %}
+                                    <a href="?page=1&datapage={{request.GET.datapage}}&search_id={{request.GET.search_id}}&search={{request.GET.search}}&start={{request.GET.start}}" 
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    &laquo; first
+                                    </a>
+                                    <a href="?page={{ page_obj.previous_page_number }}&datapage={{request.GET.datapage}}&search_id={{request.GET.search_id}}&search={{request.GET.search}}&start={{request.GET.start}}"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    previous
+                                    </a>
+                                {% endif %}
+                        
+                                <span class="current text-sm text-gray-600">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+                        
+                                {% if page_obj.has_next %}
+                                    <a href="?page={{ page_obj.next_page_number }}&datapage={{request.GET.datapage}}&search_id={{request.GET.search_id}}&search={{request.GET.search}}&start={{request.GET.start}}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">next</a>
+                                    <a href="?page={{ page_obj.paginator.num_pages }}&datapage={{request.GET.datapage}}&search_id={{request.GET.search_id}}&search={{request.GET.search}}&start={{request.GET.start}}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">last &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <div class="p-1">
+                            <a href="{% url 'administrator:list_booking' %}?page={{request.GET.datapage}}&search_id={{request.GET.search_id}}&search={{request.GET.search}}&start={{request.GET.start}}" 
+                                class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Cancel
+                            </a>
+                        </div>
+                    </div>   
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+

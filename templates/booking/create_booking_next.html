@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Create Booking
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-700 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+                    
+                    <div class="w-full max-w-3xl px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                    <form method="POST">    
+                        <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md mb-2">
+                            Create Booking to {{client}}
+                        </h5>
+                        
+                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg mb-2">
+
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-200">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-200">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-2">
+                                            Document
+                                        </th>
+                                        <th scope="col" class="px-4 py-2">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-4 py-2">
+                                            Hour
+                                        </th>
+                                        <th scope="col" class="px-4 py-2">
+                                            Service
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% csrf_token %}  
+                                    {% if form.client.errors %}
+                                        <span class='text-red-600 text-xs'>{{form.client.errors}}</span>
+                                    {% endif %}
+                                    {% if form.list_hours.errors %}
+                                        <span class='text-red-600 text-xs'>{{form.list_hours.errors}}</span>
+                                    {% endif %}
+                                        <input type="hidden" name="list_hours" value="24"/>
+                                        <input type="hidden" name="client" value="{{client.id}}"/>
+                                        <input type="hidden" name="document_number" value="{{client.document_number}}"/>
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {% if form.document_number.errors %}
+                                                <span class='text-red-600 text-xs'>{{form.document_number.errors}}</span>
+                                                {% endif %}
+                                                {{client.document_number}}
+                                            </th>
+                                            <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {% if form.date_day.errors %}
+                                                <span class='text-red-600 text-xs'>{{form.date_day.errors}}</span>
+                                                {% endif %}
+                                                {{form.date_day}}
+                                            </th>
+                                            <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {% if form.date_hour.errors %}
+                                                <span class='text-red-600 text-xs'>{{form.date_hour.errors}}</span>
+                                                {% endif %}
+                                                {{form.date_hour}}
+                                            </th>
+                                            <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {% if form.service.errors %}
+                                                <span class='text-red-600 text-xs'>{{form.service.errors}}</span>
+                                                {% endif %}
+                                                <select name="service" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-52 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option value="None"></option>
+                                                {% for service in service %}
+                                                <option value="{{service.name}}">
+                                                    {{service.name}}
+                                                </option>
+                                                {% endfor %}
+                                                </select>
+                                                
+                                            </th>
+                                        </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="flex flex-wrap justify-between px-1">
+                            <a href="{% url 'booking:create_bookingstart'%}?search={{request.GET.search}}" 
+                            class="mb-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Change Data
+                            </a>
+
+                            <button type="submit" 
+                            class="mb-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Create Booking
+                            </button>
+                        </div>
+                    
+                        <div class="px-1">
+                            <a href="{% url 'booking:list_booking_gestion' %}" 
+                                class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Cancel Booking
+                            </a>
+                        </div>
+                    </form>
+                    </div>   
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

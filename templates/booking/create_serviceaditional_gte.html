@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Add service to {{booking.client}}
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase">Add service to {{booking.client}}</h5>
+                            <input type="hidden" name="bookingspa" value="{{ booking.pk }}" />
+                            <div class="flex flex-wrap justify-center">                                
+
+                                <div class="w-full p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Service*</label>
+                                    <select name="service" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="None"></option>
+                                    
+                                    {% for service in service %}
+                                    <option value="{{service.name}}">
+                                        {{service.name}} 
+                                    </option>
+                                    {% endfor %}
+                                    </select>                                       
+                                    {% if service_error %}
+                                    <span class='text-red-600 text-xs'>{{service_error}}</span>
+                                    {% endif %}
+                                </div>
+                                                               
+                                
+                            </div>
+                                
+                            <div class="p-1">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Add Service
+                                </button>                               
+                            </div>
+                            <div class="p-1">
+                                <a href="{% url 'booking:list_booking_gestion' %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

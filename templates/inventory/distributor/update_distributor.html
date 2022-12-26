@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Update {{object}}p
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase">Update {{object}}</h5>
+
+                            <div class="flex flex-wrap justify-center">
+                                
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.name_distributor.label}}
+                                        {% if form.name_distributor.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.name_distributor.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.name_distributor}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.document.label}}
+                                        {% if form.document.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.document.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.document}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.name_contact.label}}
+                                        {% if form.name_contact.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.name_contact.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.name_contact}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.email.label}}
+                                        {% if form.email.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.email.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.email}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        Country
+                                    </label>
+                                    {{form.phone_number.subwidgets.0}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.phone_number.label}}
+                                        {% if form.phone_number.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.phone_number.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.phone_number.subwidgets.1}}
+                                </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.address.label}}
+                                        {% if form.address.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.address.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.address}}
+                                </div>
+                                
+                            </div>
+                                
+                            <div class="p-1">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Update
+                                </button>                               
+                            </div>
+                            <div class="p-1">
+                                <a href="{% url 'inventory:list_distributor' %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
