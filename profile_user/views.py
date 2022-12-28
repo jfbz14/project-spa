@@ -69,7 +69,7 @@ class ListViewProfile(LoginRequiredMixin, ListView):
         queryset = ProfileUser.objects.all()
         if data_search:
             queryset = queryset.filter(Q(user__first_name__icontains = data_search) | Q(user__last_name__icontains = data_search)).distinct()
-        return queryset.order_by('user__first_name')
+        return queryset.order_by('user__first_name').exclude(user__is_staff=True)
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
