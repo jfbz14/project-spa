@@ -112,10 +112,6 @@ Gestion
                                 <a href="{% url 'booking:update_datetime_booking' field.id %}">
                                     <span class="text-blue-600 dark:text-blue-500">{{field.created|date:'y-m-d H:i'}}</span>
                                 </a>
-                                <span class="font-medium text-gray-900 dark:text-white"><br>
-                                    Time End
-                                </span> &nbsp;
-                                {{field.end_hour|date:'y-m-d H:i'}}
                                
                             </div>
                         </div>
