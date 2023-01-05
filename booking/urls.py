@@ -81,4 +81,9 @@ urlpatterns = [
       view=CreateSaleBooking.as_view(),
       name='create_sale_booking'
    ),
+   path(
+      route='update/datetime/booking/<int:id>/',
+      view=UpdateViewDateTimeBooking.as_view(),
+      name='update_datetime_booking'
+   ),
 ]

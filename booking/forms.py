@@ -218,3 +218,16 @@ class FormCreateBookingNext(forms.Form):
                 commission_percentage=service.commission_percentage)
         create_booking.time_service+=service_aditional.time_minutes  
         create_booking.save()         
+
+
+class FormUpdateDateTimeBooking(forms.ModelForm):
+    """ Form model AdinDateService """
+
+    class Meta:
+
+        model = BookingSpa
+        fields = ('created',)
+        widgets = {
+            'created' : forms.DateTimeInput(format=('%Y-%m-%d %H:%M:%S'),attrs={'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white', 'type': 'datetime-local'}),
+        }
+      

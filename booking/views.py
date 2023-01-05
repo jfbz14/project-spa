@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 #model
 from .models import BookingSpa, ServiceAditional
 from client.models import ProfileClient
-from .forms import FormCreateBookingNext
+from .forms import FormCreateBookingNext, FormUpdateDateTimeBooking
 from service.models import Service, ItemService
 from inventory.models import RoomSpa, OutCellar, ItemCleaningRoom, InCellar
 from profile_user.models import ProfileUser
@@ -683,6 +683,28 @@ class AddServiceAditionalBookingActive(LoginRequiredMixin, View):
             'service_error' : 'Select a service'
         }
         return render (request, 'booking/add_serviceaditional_gte.html', context )  
+
+
+class UpdateViewDateTimeBooking(LoginRequiredMixin, UpdateView):
+    """ Update field datetiem booking in position Wait """
+
+    template_name = 'booking/update_datetime_booking.html'
+    pk_url_kwarg = 'id'
+    model = BookingSpa
+    form_class = FormUpdateDateTimeBooking
+    success_url = reverse_lazy('booking:list_booking_gestion')
+
+    def dispatch(self, request, *args, **kwargs):
+        id=self.kwargs['id']
+        booking = get_object_or_404(BookingSpa, id=id)
+        if booking.position == 'Wait':
+            profile = self.request.user.profileuser 
+            if profile.position == 'administrator' or profile.position == 'assistant':
+
+                return super().dispatch(request, *args, **kwargs)
+            return redirect('booking:list_booking_gestion')
+
+        return redirect('booking:list_booking_gestion')
 
 
 class FinalizedBookindSpa(LoginRequiredMixin, UpdateView):

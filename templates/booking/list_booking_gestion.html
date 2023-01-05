@@ -109,9 +109,11 @@ Gestion
                                 <span class="font-medium text-gray-900 dark:text-white">
                                     Created
                                 </span> &nbsp;
-                                {{field.created|date:'y-m-d H:i'}} 
+                                <a href="{% url 'booking:update_datetime_booking' field.id %}">
+                                    <span class="text-blue-600 dark:text-blue-500">{{field.created|date:'y-m-d H:i'}}</span>
+                                </a>
                                 <span class="font-medium text-gray-900 dark:text-white"><br>
-                                    Time Service
+                                    Time End
                                 </span> &nbsp;
                                 {{field.end_hour|date:'y-m-d H:i'}}
                                
@@ -122,6 +124,10 @@ Gestion
                         <div class="text-gray-600 dark:text-gray-400">
                             <div class="text-base font-normal">
                                 <span class="font-medium text-gray-900 dark:text-white">
+                                    Time Service
+                                </span> &nbsp;
+                                {{field.time_service|floatformat:0}} min
+                                <span class="font-medium text-gray-900 dark:text-white"><br>
                                     Hour active
                                 </span> &nbsp;
                                 {{field.active|date:'y-m-d H:i'}} 
@@ -129,10 +135,7 @@ Gestion
                                     Hour end
                                 </span> &nbsp;
                                 {{field.end_booking|date:'y-m-d H:i'}}
-                                <span class="font-medium text-gray-900 dark:text-white"><br>
-                                    Time Service
-                                </span> &nbsp;
-                                {{field.time_service|floatformat:0}}
+                                
                             </div>
                         </div>
                     </li>
