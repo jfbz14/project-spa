@@ -230,4 +230,14 @@ class FormUpdateDateTimeBooking(forms.ModelForm):
         widgets = {
             'created' : forms.DateTimeInput(format=('%Y-%m-%d %H:%M:%S'),attrs={'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white', 'type': 'datetime-local'}),
         }
-      
+        
+    def clean_created(self):
+        """ validate name service exists """
+
+        created = self.cleaned_data['created']
+        created = datetime.strptime(created.date().__str__() + ' ' + created.time().__str__(), '%Y-%m-%d %H:%M:%S')
+        datetime_now = datetime.now() - timedelta(minutes=3)
+
+        if created < datetime_now:
+            raise forms.ValidationError('Time invalid. Validate that it is not past tense')
+        return created   
