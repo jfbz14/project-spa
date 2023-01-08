@@ -95,6 +95,16 @@ Update {{object}}
                                     </label>
                                     {{form.sex}}
                                 </div>
+
+                                <div class="w-52 p-2">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{form.permission.label}}
+                                        {% if form.permission.errors %}                                    
+                                            <span class='text-red-600 text-xs'>{{form.permission.errors}}</span>
+                                        {%endif%}
+                                    </label>
+                                    {{form.permission}}
+                                </div>
                                 
                             </div>
 
