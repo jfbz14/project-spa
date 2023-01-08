@@ -43,7 +43,7 @@ class Sale(models.Model):
         ]
 
     bookingspa = models.OneToOneField(BookingSpa, on_delete=models.PROTECT)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField()
     payment_method = models.CharField(max_length=25, choices= CHOICES_METHOD_PAYMENT, default='Cash')
     price = models.FloatField()
     assistant = models.CharField(max_length=25, default='System')

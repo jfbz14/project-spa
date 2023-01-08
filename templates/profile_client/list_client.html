@@ -64,6 +64,9 @@ List profile
                     Sex
                 </th>
                 <th scope="col" class="p-2">
+                    Permission
+                </th>
+                <th scope="col" class="p-2">
                     History
                 </th>
                 <th scope="col" class="p-2">
@@ -88,6 +91,9 @@ List profile
                 </td>
                 <td class="p-2">
                     {{profile.sex}}
+                </td>
+                <td class="p-2">
+                    {{profile.permission|title}}
                 </td>
                 <td class="p-2">
                     <a href="{% url 'profileclient:update_client_history' profile.medicalhistory.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">

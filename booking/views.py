@@ -38,7 +38,7 @@ class ListViewBookingSpaGestion(LoginRequiredMixin, ListView):
             booking_all = BookingSpa.objects.filter(condition_pay = False , created__date__lte= time_now).filter(Q(position='Active') | Q(position='Finalized') | Q(position='Wait'))
             for booking in booking_all:
                 if booking.position == 'Finalized' or  booking.position == 'Active':
-                    Sale.objects.create(bookingspa=booking, price=booking.total_price)
+                    Sale.objects.create(bookingspa=booking, price=booking.total_price, created=booking.created)
                     booking.condition_pay = True
                     booking.position = 'Finalized'
                     booking.save() 
@@ -705,7 +705,7 @@ class UpdateViewDateTimeBooking(LoginRequiredMixin, UpdateView):
             return redirect('booking:list_booking_gestion')
 
         return redirect('booking:list_booking_gestion')
-
+    
 
 class FinalizedBookindSpa(LoginRequiredMixin, UpdateView):
     """ Update booking finalized """
@@ -794,7 +794,7 @@ class CreateSaleBooking(LoginRequiredMixin, CreateView):
     template_name = 'administrator/sale/create_sale_booking.html'
     pk_url_kwarg = 'id'
     model = Sale
-    fields = ['bookingspa', 'payment_method', 'price', 'assistant']
+    fields = ['bookingspa', 'payment_method', 'price', 'assistant', 'created']
 
     def dispatch(self, request, *args, **kwargs):
         # validates if you have permission for the view            
@@ -812,6 +812,7 @@ class CreateSaleBooking(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         booking = get_object_or_404(BookingSpa, id=self.kwargs['id'])
         context["booking"] = booking
+        context["datetime_sale"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         return context
          
     def get_success_url(self):

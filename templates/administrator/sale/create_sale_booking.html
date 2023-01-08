@@ -19,7 +19,8 @@ Payment ethod Booking {{booking.id}}
                             <input type="hidden" name="bookingspa" value="{{ booking.pk }}" />
                             <input type="hidden" name="price" value="{{ booking.total_price }}" />
                             <input type="hidden" name="assistant" value="{{ request.user.get_full_name }}" />
-                                                           
+                            <input type="hidden" name="created" value="{{datetime_sale}}" />
+                            
                                 <div class="flex flex-wrap justify-center">                                
                            
                                     <div class="w-52 p-2">

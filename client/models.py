@@ -19,13 +19,19 @@ class ProfileClient(models.Model):
         ('UN','UNKNOWN'),
     ]
 
+    PERMISSION_CHOICES = [
+        ('YES','YES'),
+        ('NOT','NOT'),
+    ]
+
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     document_type = models.CharField(max_length=3, choices=DOCUMENT_TYPE_CHOICES)
     document_number = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     phone_number = PhoneNumberField(unique=True)
-    sex = models.CharField(max_length=2, choices=SEX_TYPE_CHOICES, default='UNKNOWN')
+    sex = models.CharField(max_length=10, choices=SEX_TYPE_CHOICES, default='UNKNOWN')
+    permission = models.CharField(max_length=10, choices=PERMISSION_CHOICES, default='NOT')
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
