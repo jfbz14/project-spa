@@ -214,7 +214,7 @@ class ListViewCellarGlobal(LoginRequiredMixin, ListView):
                 data_update_in_cellar_balance = int(data_update_in_cellar_balance)
             except:
                 data_update_in_cellar_balance = None  
-
+        
         #Update field balance
         if data_update_in_cellar_balance and data_update_in_cellar_balance_id:
             cellar = get_object_or_404(CellarGlobal, id=data_update_in_cellar_balance_id)
@@ -223,8 +223,40 @@ class ListViewCellarGlobal(LoginRequiredMixin, ListView):
 
         if data_search:
            queryset = queryset.filter(article__article__icontains = data_search)
-        return queryset.all().order_by('article__article') 
 
+        return queryset.order_by('article__article') 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        data_search = self.request.GET.get('search') 
+        data_start = self.request.GET.get('start')
+        data_end = self.request.GET.get('end')
+        
+        try:
+            if data_start:
+                data_start=datetime.datetime.strptime(data_start,'%Y-%m-%d').date()
+                if data_end:
+                    data_end=datetime.datetime.strptime(data_end,'%Y-%m-%d').date()
+        except:
+            data_start = None 
+            data_end = None
+
+        incellar = InCellar.objects.all()
+        outcellar = OutCellar.objects.all()
+        if data_search and data_start and data_end:
+            incellar = incellar.filter(article__article__icontains = data_search).filter(date__date__range=[data_start, data_end])
+            outcellar = outcellar.filter(article__article__icontains = data_search).filter(date__date__range=[data_start, data_end])
+        elif data_start and data_end:
+            incellar = incellar.filter(date__date__range=[data_start, data_end])
+            outcellar = outcellar.filter(date__date__range=[data_start, data_end])
+
+        incellar = incellar.filter().annotate(supplie=Coalesce('article', 'article')).values('supplie').annotate(cant=Sum('amount'))
+        outcellar = outcellar.filter().annotate(supplie=Coalesce('article', 'article')).values('supplie').annotate(cant=Sum('amount'))
+        context["incellar"] = incellar
+        context["outcellar"] = outcellar
+        return context
+        
 
 # InCellar
 class CreateInCellar(LoginRequiredMixin, CreateView):
@@ -271,17 +303,24 @@ class ListViewInCellar(LoginRequiredMixin, ListView):
         """ Returns the list of the article, obtained by the id. """
 
         id = self.kwargs.get("id")
-        data_search = self.request.GET.get('search')
         queryset = InCellar.objects.filter(article__id=id)
        
+        data_start = self.request.GET.get('start')
+        data_end = self.request.GET.get('end')
+        
         try:
-            if data_search:
-                data_search=datetime.datetime.strptime(data_search,'%Y-%m-%d').date()
+            if data_start:
+                data_start=datetime.datetime.strptime(data_start,'%Y-%m-%d').date()
+                if data_end:
+                    data_end=datetime.datetime.strptime(data_end,'%Y-%m-%d').date()
         except:
-            data_search = None
+            data_start = None 
+            data_end = None
+
        
-        if data_search:
-            queryset = queryset.filter(date__date = data_search)
+        if data_start and data_end:
+            queryset = queryset.filter(date__date__range= [data_start, data_end])
+
         return queryset.order_by('-date')
 
     def get_context_data(self, **kwargs):
@@ -335,16 +374,24 @@ class ListViewOutCellar(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         id = self.kwargs.get("id")
-        data_search = self.request.GET.get('search')
         queryset = OutCellar.objects.filter(article__id=id)
+
+        data_start = self.request.GET.get('start')
+        data_end = self.request.GET.get('end')
+        
         try:
-            if data_search:
-                data_search=datetime.datetime.strptime(data_search,'%Y-%m-%d').date()
+            if data_start:
+                data_start=datetime.datetime.strptime(data_start,'%Y-%m-%d').date()
+                if data_end:
+                    data_end=datetime.datetime.strptime(data_end,'%Y-%m-%d').date()
         except:
-            data_search = None
+            data_start = None 
+            data_end = None
+
        
-        if data_search:
-            queryset = queryset.filter(date__date = data_search)
+        if data_start and data_end:
+            queryset = queryset.filter(date__date__range= [data_start, data_end])
+       
         return queryset.order_by('-date')
 
     def get_context_data(self, **kwargs):
