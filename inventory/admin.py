@@ -85,7 +85,7 @@ class CellarGlobalResource(resources.ModelResource):
 class CellarGlobalAdmin(ImportExportModelAdmin):
     """CellarGlobal admin."""
 
-    resource_class = CellarGlobal
+    resource_class = CellarGlobalResource
     list_display = ('id', 'article', 'in_cellar_balance', 'difference', 'cellar',)
     search_fields = ('article', )
     list_per_page = 15
