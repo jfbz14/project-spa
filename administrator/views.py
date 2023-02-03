@@ -505,19 +505,30 @@ class ListDashBoard(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         data_start = self.request.GET.get('start')
+        data_end = self.request.GET.get('end')
         
         try:
             if data_start:
                 data_start=datetime.strptime(data_start,'%Y-%m-%d').date()
+                if data_end:
+                    data_end=datetime.strptime(data_end,'%Y-%m-%d').date()
         except:
             data_start = None 
+            data_end = None
 
         sale_all = Sale.objects.all()
         expense_all = Expenses.objects.all()
 
-        if data_start:
-            sale_all = sale_all.filter(created__date=data_start) 
-            expense_all = expense_all.filter(created=data_start)
+        if data_start and data_end:
+            sale_all = sale_all.filter(created__date__range=[data_start, data_end]) 
+            expense_all = expense_all.filter(created__range=[data_start, data_end])
+        elif data_start:
+            sale_all = sale_all.filter(created__date_gte=data_start) 
+            expense_all = expense_all.filter(created_gte=data_start)
+        elif data_end:
+            sale_all = sale_all.filter(created__date_lte=data_end) 
+            expense_all = expense_all.filter(created_lte=data_end)
+
 
         # Query sale
         sale_all = sale_all.annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale=Sum('price')).order_by('day')
@@ -574,4 +585,4 @@ class PdfView(LoginRequiredMixin, PDFTemplateView):
             total_price_sevice = total_price_sevice,
             company = company,
             **kwargs
-        )        
+        )      
