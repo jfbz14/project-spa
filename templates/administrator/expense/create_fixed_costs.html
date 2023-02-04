@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+Create fixed costs
+{% endblock content_title %}
+
+{% block content %}
+
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 pb-20 text-center sm:block sm:p-0 ">
+        <div class="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity dark:bg-gray-500" aria-hidden="true"></div>
+            <div class="relative inline-block align-bottom rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="flex items-baseline justify-center">
+
+                    <div class="w-full max-w-xl p-1 bg-white border border-gray-200 rounded-lg shadow-md sm:p-1 md:p-1 dark:bg-gray-800 dark:border-gray-700">
+                        <form class="space-y-2" method="POST">
+                            {% csrf_token %}
+                            <h5 class="text-xl font-medium text-gray-900 dark:text-white shadow-md uppercase px-4">Create Fixed Costs</h5>
+
+                            <div class="flex flex-wrap justify-center">
+                                
+                                <div class="w-52 p-2">
+                                    <label for="{{form.description.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.description.label}}</label>
+                                    {% if form.description.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.description.errors}}</span>
+                                    {%endif%}
+                                    {{form.description}}
+                                    
+                                </div>                                
+                                
+                                <div class="w-52 p-2">
+                                    <label for="{{form.distributor.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.distributor.label}}</label>
+                                    {% if form.distributor.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.distributor.errors}}</span>
+                                    {%endif%}
+                                    {{form.distributor}}
+                                    
+                                </div>
+                                <div class="w-52 p-2">
+                                    <label for="{{form.price.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.price.label}}</label>
+                                    {% if form.price.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.price.errors}}</span>
+                                    {%endif%}
+                                    {{form.price}}
+                                    
+                                </div>
+
+                            </div>
+                                
+                            <div class="px-4">
+                                <button 
+                                    type="submit" 
+                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg  px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Create
+                                </button>                               
+                            </div>
+                            <div class="px-4">
+                                <a href="{% url 'administrator:list_fixed_costs' %}" 
+                                    class="flex w-full justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
