@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, ListView,FormView, View
+from django.views.generic import UpdateView, ListView, FormView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from datetime import datetime, timedelta
@@ -9,8 +9,8 @@ from django.conf import settings
 from easy_pdf.views import PDFTemplateView
 
 #model
-from administrator.models import Expenses, Sale, AdminDateService, EmployeeHistoryBooking, ServiceEmployeeBooking, CompanyData
-from administrator.forms import FormCreateExpense, FormUpdateAdminDateService
+from administrator.models import Expenses, Sale, AdminDateService, EmployeeHistoryBooking, ServiceEmployeeBooking, CompanyData, FixedCosts
+from administrator.forms import FormCreateExpense, FormUpdateAdminDateService, FormCreateFixedCosts
 from service.models import Service
 from profile_user.models import ProfileUser
 from booking.models import BookingSpa, ServiceAditional
@@ -54,30 +54,46 @@ class ListViewExpenses(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """validate search field, otherwise it returns the model"""
                 
-        data_start = self.request.GET.get('start')
         data_search = self.request.GET.get('search')
+        data_start = self.request.GET.get('start')
+        data_end = self.request.GET.get('end')
 
-        if data_start:
-            try:
+        try:
+            if data_start:
                 data_start=datetime.strptime(data_start,'%Y-%m-%d').date()
-            except:
-                data_start = None    
+                if data_end:
+                    data_end=datetime.strptime(data_end,'%Y-%m-%d').date()
+        except:
+            data_start = None 
+            data_end = None  
 
         queryset = Expenses.objects.all()   
         
-        if data_start and data_search:
-            queryset = queryset.filter(created=data_start, classsification=data_search)
-        
-        elif data_start:     
-            queryset = queryset.filter(created=data_start)
-
+        if data_start and  data_end and data_search:
+            queryset = queryset.filter(created__range=[data_start, data_end], classsification=data_search)
+        elif data_start and  data_end:
+            queryset = queryset.filter(created__range=[data_start, data_end])
+        elif data_start:
+            queryset = queryset.filter(created__gte=data_start)
+        elif  data_end:
+            queryset = queryset.filter(created__lte=data_end)
         elif data_search:
             queryset = queryset.filter(classsification=data_search)
-  
-        return queryset.order_by('-created')
+
+        price_total_query = queryset.values('price_total')
+        price_total = float()
+        for price in price_total_query:
+           price_total += price['price_total']   
+
+        self.extra_context = {'price_total':price_total}
+
+        profile = self.request.user.profileuser
+        if profile.position == 'administrator':
+            return queryset.order_by('-created')
+        return queryset.order_by('-created').exclude(is_valid=True)
 
 
-class updateExpense(LoginRequiredMixin, UpdateView):
+class UpdateExpense(LoginRequiredMixin, UpdateView):
     """ Update Expense """
 
     template_name = 'administrator/expense/update_expense.html'
@@ -93,6 +109,94 @@ class updateExpense(LoginRequiredMixin, UpdateView):
             return redirect('booking:list_booking_wait_gestion')
         return super().dispatch(request, *args, **kwargs)
 
+# Fixed Costs
+
+class CreateFixedCosts(LoginRequiredMixin, FormView):
+    """ create fixed costs """
+
+    template_name = 'administrator/expense/create_fixed_costs.html'
+    form_class = FormCreateFixedCosts
+    success_url = reverse_lazy('administrator:list_fixed_costs')
+
+    def dispatch(self, request, *args, **kwargs):
+        # validates if you have permission for the view            
+        profile = self.request.user.profileuser
+        if profile.position == 'administrator':
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('booking:list_booking_wait_gestion')
+    
+    def form_valid(self, form):
+        """Save form data."""
+        form.save()
+        return super().form_valid(form)
+
+
+class ListViewFixedCosts(LoginRequiredMixin, ListView):
+    """ list views all expese"""
+
+    template_name = 'administrator/expense/list_fixed_costs.html'
+    paginate_by = 15
+    context_object_name = 'fixed_costs'
+
+    def dispatch(self, request, *args, **kwargs):
+        # validates if you have permission for the view            
+        profile = self.request.user.profileuser
+        if profile.position == 'administrator':
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('booking:list_booking_wait_gestion')
+
+    def get_queryset(self):
+        """validate search field, otherwise it returns the model"""
+                
+        data_search = self.request.GET.get('search')
+        
+        queryset = FixedCosts.objects.all()   
+        
+        if data_search:
+            queryset = queryset.filter(description__icontains=data_search)
+
+        price_total_query = queryset.values('price')
+        price_total = float()
+        for price in price_total_query:
+           price_total += price['price']   
+           
+        self.extra_context = {'price_total':price_total}
+  
+        return queryset
+
+
+class UpdateFixedCosts(LoginRequiredMixin, UpdateView):
+    """ Update Expense """
+
+    template_name = 'administrator/expense/update_fixed_costs.html'
+    pk_url_kwarg = 'id'
+    model = FixedCosts
+    form_class = FormCreateFixedCosts
+    success_url = reverse_lazy('administrator:list_fixed_costs')
+
+    def dispatch(self, request, *args, **kwargs):
+        # validates if you have permission for the view            
+        profile = self.request.user.profileuser
+        if profile.position == 'administrator':
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('booking:list_booking_wait_gestion')
+    
+
+class DeleteFixedCosts(LoginRequiredMixin, DeleteView):
+    """ User detail view."""
+
+    template_name = 'administrator/expense/delete_fixed_costs.html'
+    pk_url_kwarg = 'id'
+    model = FixedCosts
+    success_url = reverse_lazy('administrator:list_fixed_costs')
+
+    def dispatch(self, request, *args, **kwargs):
+        # validates if you have permission for the view            
+        profile = self.request.user.profileuser
+        if profile.position == 'administrator':
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('booking:list_booking_wait_gestion')
+    
 
 #Date Admin
 class UpdateAdminDateTime(LoginRequiredMixin, UpdateView):
