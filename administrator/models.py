@@ -65,10 +65,21 @@ class Expenses(models.Model):
             ('expense','expense')
         ], 
         default='expense')
+    is_valid = models.BooleanField(null=True, blank=True, default=False)
     created = models.DateField()
 
     def __str__(self):
         return str(self.distributor)
+
+
+class FixedCosts(models.Model):
+
+    description = models.CharField(max_length=50, unique=True)
+    distributor = models.ForeignKey(Distributor, on_delete=models.PROTECT)
+    price = models.FloatField()
+    
+    def __str__(self):
+        return str(self.description)
 
 
 class EmployeeHistoryBooking(models.Model):
@@ -110,5 +121,3 @@ class CompanyData(models.Model):
 
     def __str__(self):
         return self.name_company
-
-
