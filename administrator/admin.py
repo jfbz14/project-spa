@@ -4,7 +4,28 @@ from import_export.admin import ImportExportModelAdmin
 from django.contrib import admin
 
 # Register your models here.
-from .models import Expenses, AdminDateService, Sale, EmployeeHistoryBooking, ServiceEmployeeBooking, CompanyData
+from .models import Expenses, AdminDateService, Sale, EmployeeHistoryBooking, ServiceEmployeeBooking, CompanyData, FixedCosts
+
+class FixedCostsResource(resources.ModelResource):
+
+    class Meta:
+        model = FixedCosts
+
+@admin.register(FixedCosts)
+class FixedCostsAdmin(ImportExportModelAdmin):
+    """CompanyData admin."""
+
+    resource_class = FixedCostsResource
+    list_display = ('pk', 'distributor', 'price')
+    list_display_links = ('pk',)
+
+    search_fields = (
+        'distributor',
+        'description',
+        
+    )
+
+    list_per_page = 15
 
 
 class CompanyDataResource(resources.ModelResource):
