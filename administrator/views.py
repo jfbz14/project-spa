@@ -155,9 +155,10 @@ class ListViewFixedCosts(LoginRequiredMixin, ListView):
         if data_search:
             queryset = queryset.filter(description__icontains=data_search)
 
-        price_total_query = queryset.values('price')
-        price_total = float()
         try:
+            price_total_query = queryset.values('price')
+            price_total = float()
+        
             for price in price_total_query:
                 price_total += price['price']   
         except:
