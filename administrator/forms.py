@@ -2,7 +2,7 @@ from django import forms
 from datetime import datetime
 
 #model
-from administrator.models import Expenses, AdminDateService
+from administrator.models import Expenses, AdminDateService, FixedCosts
 from service.models import Service
 from client.models import ProfileClient
 
@@ -32,7 +32,22 @@ class FormCreateExpense(forms.ModelForm):
 
         if created > date_today:
             raise forms.ValidationError('invalid date, not future.')
-        return created     
+        return created 
+
+
+class FormCreateFixedCosts(forms.ModelForm):
+    """ form model expense"""
+
+    class Meta:
+
+        model = FixedCosts
+        fields = '__all__'
+        widgets = {
+            'description' : forms.TextInput(attrs={'class':'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-600 dark:focus:border-indigo-600'}),
+            'distributor' : forms.Select(attrs={'class':'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-600 dark:focus:border-indigo-600'}),
+            'price' : forms.NumberInput(attrs={'class':'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-600 dark:focus:border-indigo-600'}),
+
+        }   
 
 
 class FormUpdateAdminDateService(forms.ModelForm):
@@ -109,4 +124,4 @@ class FormCreateBookingStart(forms.Form):
             raise forms.ValidationError('The service does not exist.')
         return service
     
-    
+  
