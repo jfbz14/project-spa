@@ -20,8 +20,29 @@ urlpatterns = [
     ),
     path(
         route='update/expense/<int:id>/',
-        view=views.updateExpense.as_view(),
+        view=views.UpdateExpense.as_view(),
         name='update_expense'
+    ),
+    # Fixed Costs
+    path(
+        route='create/fixed_costs/',
+        view=views.CreateFixedCosts.as_view(),
+        name='create_fixed_costs'
+    ),
+    path(
+        route='list/fixed_costs/',
+        view=views.ListViewFixedCosts.as_view(),
+        name='list_fixed_costs'
+    ),
+    path(
+        route='update/fixed_costs/<int:id>/',
+        view=views.UpdateFixedCosts.as_view(),
+        name='update_fixed_costs'
+    ),
+    path(
+        route='delete/fixed_costs/<int:id>/',
+        view=views.DeleteFixedCosts.as_view(),
+        name='delete_fixed_costs'
     ),
     # Admin Datetime Service
     path(
@@ -80,5 +101,6 @@ urlpatterns = [
       view=views.ListDashBoard.as_view(),
       name='list_dashboard'
     ),
+    
 ]
 
