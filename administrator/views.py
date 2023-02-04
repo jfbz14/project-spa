@@ -157,8 +157,11 @@ class ListViewFixedCosts(LoginRequiredMixin, ListView):
 
         price_total_query = queryset.values('price')
         price_total = float()
-        for price in price_total_query:
-           price_total += price['price']   
+        try:
+            for price in price_total_query:
+                price_total += price['price']   
+        except:
+            price_total = 0    
            
         self.extra_context = {'price_total':price_total}
   
