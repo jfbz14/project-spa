@@ -67,6 +67,14 @@ Create expense
                                     {{form.classsification}}
                                     
                                 </div>
+                                <div class="w-52 p-2">
+                                    <label for="{{form.is_valid.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{form.is_valid.label}}</label>
+                                    {% if form.is_valid.errors %}                                    
+                                        <span class='text-red-600 text-xs'>{{form.is_valid.errors}}</span>
+                                    {%endif%}
+                                    {{form.is_valid}}
+                                    
+                                </div>
 
                             </div>
                                 
