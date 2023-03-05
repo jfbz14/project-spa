@@ -100,6 +100,11 @@ List expenses
                 <th scope="col" class="p-2">
                     classsification
                 </th>
+                {% if request.user.profileuser.position == 'administrator' %}
+                <th scope="col" class="p-2">
+                    View
+                </th>
+                {% endif %}
                 <th scope="col" class="p-2">
                     Edit
                 </th>
@@ -126,6 +131,11 @@ List expenses
                 <td class="p-2">
                     {{field.classsification}}
                 </td>
+                {% if request.user.profileuser.position == 'administrator' %}
+                <td class="p-2">
+                    {{field.is_valid}}
+                </td>
+                {% endif %}
                 <td class="p-2">
                     <a href="{% url 'administrator:update_expense' field.id %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         <svg 
