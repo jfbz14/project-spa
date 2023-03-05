@@ -71,11 +71,13 @@ List expenses
     </form>
 </div>
 
+{% if request.user.profileuser.position == 'administrator' %}                
 <div class="text-center">
     <h5 class="font-medium text-gray-900 dark:text-gray-900 shadow-md mb-2 uppercase">
         Price total: $ {{price_total|floatformat:0}}
     </h5> 
 </div>
+{% endif %}
   
 
 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
