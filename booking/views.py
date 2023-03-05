@@ -49,7 +49,6 @@ class ListViewBookingSpaGestion(LoginRequiredMixin, ListView):
                     booking.balance = 0
                     booking.total_price = 0
                     booking.condition_pay = False
-                    booking.room.condition = True
                     booking.save() 
         # validates if you have permission for the view            
         profile = self.request.user.profileuser
