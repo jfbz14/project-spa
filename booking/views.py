@@ -41,6 +41,7 @@ class ListViewBookingSpaGestion(LoginRequiredMixin, ListView):
                     Sale.objects.create(bookingspa=booking, price=booking.total_price, created=booking.created)
                     booking.condition_pay = True
                     booking.position = 'Finalized'
+                    booking.room.condition = True
                     booking.save() 
                 if booking.position == 'Wait':
                     booking.position = 'Cancel'
@@ -48,6 +49,7 @@ class ListViewBookingSpaGestion(LoginRequiredMixin, ListView):
                     booking.balance = 0
                     booking.total_price = 0
                     booking.condition_pay = False
+                    booking.room.condition = True
                     booking.save() 
         # validates if you have permission for the view            
         profile = self.request.user.profileuser
