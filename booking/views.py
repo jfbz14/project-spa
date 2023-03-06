@@ -567,7 +567,7 @@ class DetailBookingActivate(LoginRequiredMixin, DetailView):
         booking = get_object_or_404(BookingSpa, id=self.kwargs['id'])
 
         if booking.position == 'Active':
-            if profile == booking.profile or profile.position == 'administrator':
+            if profile == booking.profile or profile.position == 'administrator' or profile.position == 'assistant':
 
                 return super().dispatch(request, *args, **kwargs)
 
@@ -721,7 +721,7 @@ class FinalizedBookindSpa(LoginRequiredMixin, UpdateView):
         profile = self.request.user.profileuser 
         booking = get_object_or_404(BookingSpa, id=self.kwargs['id'])
 
-        if profile == booking.profile or profile.position == 'administrator':
+        if profile == booking.profile or profile.position == 'administrator' or profile.position == 'assistant':
 
             return super().dispatch(request, *args, **kwargs)
 
