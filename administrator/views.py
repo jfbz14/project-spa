@@ -564,54 +564,6 @@ class ListDashBoard(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
-        time_now = datetime.now().date()
-        data_start = self.request.GET.get('start')
-        
-        try:
-            if data_start:
-                data_start=datetime.strptime(data_start,'%Y-%m-%d').date()
-        except:
-            data_start = None 
-
-        queryset = BookingSpa.objects.all()
-        query_service = ServiceAditional.objects.all()
-
-        if data_start:
-            queryset = queryset.filter(created__date=data_start) 
-            query_service = query_service.filter(modified__date=data_start)
-        else:
-            queryset = BookingSpa.objects.filter(created__date=time_now)
-            query_service = ServiceAditional.objects.filter(modified__date=time_now)
-
-        booking_wait = queryset.filter(position='Wait').count() 
-        booking_active = queryset.filter(position='Active').count() 
-        booking_cancel = queryset.filter(position='Cancel').count()
-        booking_finalized = queryset.filter(position='Finalized').count()
-        booking_payment = queryset.filter(condition_pay=True).count()
-        booking_count = queryset.count()
-        booking_total_price = queryset.filter(condition_pay=True).annotate(day=TruncDay('created__date')).annotate(suma_total_price=Sum('total_price')).values('suma_total_price')
-        total_price_all = float()
-        for total in booking_total_price:
-            total_price_all += total['suma_total_price']
-        booking_total_price = total_price_all   
-
-        service_cancel = query_service.filter(position='Cancel').count()
-
-        queryset = {
-            'wait' : booking_wait, 
-            'active' : booking_active, 
-            'cancel' : booking_cancel,
-            'finalized' : booking_finalized,
-            'payment' : booking_payment,
-            'booking_count' : booking_count,
-            'total_price' : booking_total_price,
-            'service_cancel' : service_cancel,
-            }    
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
         data_start = self.request.GET.get('start')
         data_end = self.request.GET.get('end')
         
@@ -626,36 +578,87 @@ class ListDashBoard(LoginRequiredMixin, ListView):
 
         sale_all = Sale.objects.all()
         expense_all = Expenses.objects.all()
+        queryset_bookingspa = BookingSpa.objects.all()
+        query_service_serviceaditional = ServiceAditional.objects.all()
 
         if data_start and data_end:
             sale_all = sale_all.filter(created__date__range=[data_start, data_end]) 
             expense_all = expense_all.filter(created__range=[data_start, data_end])
+            queryset_bookingspa = queryset_bookingspa.filter(created__date__range=[data_start, data_end]) 
+            query_service_serviceaditional = query_service_serviceaditional.filter(created__date__range=[data_start, data_end])
+
         elif data_start:
             sale_all = sale_all.filter(created__date_gte=data_start) 
             expense_all = expense_all.filter(created_gte=data_start)
+            queryset_bookingspa = queryset_bookingspa.filter(created__date_gte=data_start) 
+            query_service_serviceaditional = query_service_serviceaditional.filter(created__date_gte=data_start)
+
         elif data_end:
             sale_all = sale_all.filter(created__date_lte=data_end) 
             expense_all = expense_all.filter(created_lte=data_end)
+            queryset_bookingspa = queryset_bookingspa.filter(created__date_lte=data_end) 
+            query_service_serviceaditional = query_service_serviceaditional.filter(created__date_lte=data_end)
 
+        else:
+            sale_all = sale_all.filter(created__date__month=datetime.now().month)    
+            expense_all = expense_all.filter(created__month=datetime.now().month) 
+            queryset_bookingspa = queryset_bookingspa.filter(created__date__month=datetime.now().month) 
+            query_service_serviceaditional = query_service_serviceaditional.filter(created__date__month=datetime.now().month)
 
         # Query sale
-        sale_all = sale_all.annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale=Sum('price')).order_by('day')
+        sale_all_filter = sale_all.annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale=Sum('price')).order_by('day')
         sum_sale = float()
-        for sale in sale_all:
-            sum_sale += sale['sum_sale']
-        
+        for sale in sale_all_filter:
+            sum_sale += sale['sum_sale']  
+
+        # Query Card 
+        card_count = sale_all.filter(payment_method='Card').annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale_card=Sum('price'))  
+        sum_sale_card = float()
+        for sale_card in card_count:
+            sum_sale_card += sale_card['sum_sale_card']   
+
+        # Query Cash 
+        cash_count = sale_all.filter(payment_method='Cash').annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale_cash=Sum('price'))  
+        sum_sale_cash = float()
+        for sale_cash in cash_count:
+            sum_sale_cash += sale_cash['sum_sale_cash']   
+
         # Query Expense    
         expense_all = expense_all.annotate(day=TruncDay('created')).values('day').annotate(sum_expense=Sum('price_total')).order_by('day')
         sum_expense = float()
         for expense in expense_all:
-            sum_expense += expense['sum_expense']
+            sum_expense += expense['sum_expense']     
 
-        context["sum_expense"] = sum_expense
-        context["sum_sale"] = sum_sale
-        context["sum_total"] = sum_sale - sum_expense
-        context["sale"] = sale_all
+        # Booking filter
+        booking_cancel = queryset_bookingspa.filter(position='Cancel').count()
+        booking_payment = queryset_bookingspa.filter(condition_pay=True).count()
+        booking_count = queryset_bookingspa.count()
+        booking_total_price = queryset_bookingspa.filter(condition_pay=True).annotate(day=TruncDay('created__date')).annotate(suma_total_price=Sum('total_price')).values('suma_total_price')
+        total_price_all = float()
+        for total in booking_total_price:
+            total_price_all += total['suma_total_price']
+        booking_total_price = total_price_all   
 
-        return context
+        service_cancel = query_service_serviceaditional.filter(position='Cancel').count()
+
+        queryset = {
+            'cancel' : booking_cancel,
+            'payment' : booking_payment,
+            'booking_count' : booking_count,
+            'total_price' : booking_total_price,
+            'service_cancel' : service_cancel,
+            'sum_expense' : sum_expense,
+            'sum_sale' : sum_sale,
+            'sum_total' : sum_sale - sum_expense,
+            'card_count' : sum_sale_card,
+            'cash_count' : sum_sale_cash,
+            
+            }   
+        self.extra_context = {'sale' : sale_all_filter,
+                              'expense': expense_all,
+                              }
+
+        return queryset
  
 
 class PdfView(LoginRequiredMixin, PDFTemplateView):
