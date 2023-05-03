@@ -19,9 +19,11 @@ Dashboard
 
 {% block content %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-           
-    <div class=" mx-auto">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+<div class="">
+    <div class="mx-auto pt-4">
         <form method="GET" class="flex items-stretch justify-center" >   
             {% csrf_token %} 
 
@@ -55,71 +57,173 @@ Dashboard
     </div>
 
     <div class="text-center">
-        <h5 class="font-medium text-gray-900 dark:text-gray-900 shadow-md mb-2 uppercase">
+        <h5 class="font-medium text-xl text-gray-900 dark:text-gray-700 shadow-lg shadow-blue-500/50 mb-4 pb-2 uppercase">
             Financial Data
         </h5> 
     </div>
+   
     
-    <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
-        
-        <div class="px-1 w-full justify-center shadow-md border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600">
-            <canvas class="p-1" id="chartBar"></canvas>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-2 ">
+
+        <div class="w-full max-w-2xl mx-auto border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
+            <canvas class="p-1" id="chartBar1"></canvas>
     
             <script>
-                const labelsBarChart = [{% for sale in sale %}"{{sale.day}}",{% endfor %}];
-                const dataBarChart = {
-                labels: labelsBarChart,
+                const labelsBarChart1 = [{% for sale in sale %}"{{sale.day|date:'j/n/y'}}",{% endfor %}];
+                const dataBarChart1 = {
+                labels: labelsBarChart1,
                 datasets: [
                     {
-                    label: "",
-                    backgroundColor: "rgb(86, 93, 245)",
-                    borderColor: "white",
+                    label: "Sales",
+                    backgroundColor:[
+                    "rgba(54, 162, 235, 0.8)",
+                    "rgba(255, 99, 132, 0.8)",
+                    "rgba(255, 206, 86, 0.8)",
+                    "rgba(75, 192, 192, 0.8)",
+                    "rgba(153, 102, 255, 0.8)",
+                    "rgba(255, 159, 64, 0.8)",
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    borderColor: "blue",
+                    hoverBackgroundColor:"green",
+                    borderSkipped: false,
+                    pointStyle: 'circle',
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
                     data: [{% for sale in sale %}{{sale.sum_sale}},{% endfor %}],
                     },
                 ],
                 
                 };
-            
-                const configBarChart = {
-                type: "bar",
-                data: dataBarChart,
+                
+                const configBarChart1 = {
+                type: "line",
+                data: dataBarChart1,
                 options: {
                     responsive: true,
+                    plugins: {  // 'legend' now within object 'plugins {}'
+                        legend: {
+                            labels: {
+                            color: "black",  // not 'fontColor:' anymore
+                            // fontSize: 18  // not 'fontSize:' anymore
+                            font: {
+                                size: 14 // 'size' now within object 'font {}'
+                            }
+                            }
+                        }
+                    },
+                    animations: {
+                        tension: {
+                          duration: 2500,
+                          easing: 'linear',
+                          from: 1,
+                          to: 0,
+                          loop: true
+                        }
+                      },
                     scales: {
                         y: {
-                          ticks: { color: 'rgb(86, 93, 245)', beginAtZero: true }
+                        ticks: { color: 'black', beginAtZero: true }
                         },
                         x: {
-                          ticks: { color: 'rgb(86, 93, 245)', beginAtZero: true }
+                        ticks: { color: 'black', beginAtZero: true }
                         }
                     },
                 },
                 
                 };
             
-                var chartBar = new Chart(
-                document.getElementById("chartBar"),
-                configBarChart
+                var chartBar1 = new Chart(
+                document.getElementById("chartBar1"),
+                configBarChart1
                 );
             </script>
         </div>
+        
+        <div class="w-full max-w-2xl mx-auto border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
+            <canvas class="p-1 m-4" id="chartBar2"></canvas>
     
-        <div class="grid mx-auto grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-2 xl:gap-x-8">
+            <script>
+                const labelsBarChart2 = [
+                    {% for expense in expense %}"{{expense.day|date:'j-n-y'}}",{% endfor %}
+                ];
+                const dataBarChart2 = {
+                labels: labelsBarChart2,
+                datasets: [
+                    {
+                    label: "Expenses",
+                    backgroundColor: [
+                    "rgba(54, 162, 235, 0.8)",
+                    "rgba(255, 99, 132, 0.8)",
+                    "rgba(255, 206, 86, 0.8)",
+                    "rgba(75, 192, 192, 0.8)",
+                    "rgba(153, 102, 255, 0.8)",
+                    "rgba(255, 159, 64, 0.8)",
+                  ],
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    borderColor: "rgb(102, 178, 255)",
+                    hoverBackgroundColor:"rgb(178, 102, 255)",
+                    borderSkipped: false,
+                    data: [{% for expense in expense %}{{expense.sum_expense}},{% endfor %}],
+                    },
+                ],
+                
+                };
+            
+                const configBarChart2 = {
+                type: "bar",
+                data: dataBarChart2,
+                options: {
+                    responsive: true,
+                   
+                    plugins: {  // 'legend' now within object 'plugins {}'
+                    legend: {
+                        labels: {
+                        color: "black",  // not 'fontColor:' anymore
+                        // fontSize: 18  // not 'fontSize:' anymore
+                        font: {
+                            size: 14 // 'size' now within object 'font {}'
+                        }
+                        }
+                    }
+                },
+                    scales: {
+                        y: {
+                          ticks: { color: 'black', beginAtZero: true }
+                        },
+                        x: {
+                          ticks: { color: 'black', beginAtZero: true }
+                        }
+                    },
+                },
+                
+                };
 
-            <div class="shadow-md p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                var chartBar2 = new Chart(
+                document.getElementById("chartBar2"),
+                configBarChart2
+                );
+            </script>
+        </div>
+
+    
+        <div class="grid mx-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+
+            <div class="w-full p-2 justify-center border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
                 <canvas id="chartDoughnut"></canvas>
 
                 <script>
                     const dataDoughnut = {
-                    labels: ["", ""],
+                    labels: ["Expense", "Income"],
                     datasets: [
                         {
                         label: " Data",
-                        data: [{{sum_expense}}, {{sum_sale}}],
+                        data: [{{booking.sum_expense}}, {{booking.sum_sale}}],
                         backgroundColor: [
                             "rgb(232, 35, 26 )",
-                            "rgb(86, 93, 245)",
-                            "rgb(86, 93, 245)",
+                            "rgb(0, 102, 0)",
                         ],
                         hoverOffset: 4,
                         },
@@ -129,7 +233,19 @@ Dashboard
                     const configDoughnut = {
                     type: "doughnut",
                     data: dataDoughnut,
-                    options: {},
+                    options: {
+                        plugins: {  // 'legend' now within object 'plugins {}'
+                    legend: {
+                        labels: {
+                        color: "black",  // not 'fontColor:' anymore
+                        // fontSize: 18  // not 'fontSize:' anymore
+                        font: {
+                            size: 14// 'size' now within object 'font {}'
+                        }
+                        }
+                    }
+                },
+                    },
                     };
                 
                     var chartBar = new Chart(
@@ -138,44 +254,152 @@ Dashboard
                     );
                 </script>
             </div>
-            
-            <div class="shadow-md justify-center px-4 pt-8 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+
+            <div class="grid gap-2 grid-cols-2 pr-4 pl-2 pt-4 pb-2 w-full min-w-full border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
                 
-                <div class="flex items-stretch font-medium text-blue-600 dark:text-blue-500 ">
-                    <svg class="w-12 h-12 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd"></path></svg>                                    
-                    <div class="mx-auto">
-                        <h5 class="text-xl font-bold text-gray-500 dark:text-gray-200 text-center ">Expense</h5>
-                        
-                        <div class="text-center pt-1">
-                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-red-600 rounded">$ {{sum_expense|floatformat}}</span>
-                        </div>
+                <div class="text-blue-600 mx-auto ml-4">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"></path>
+                      </svg>
+                </div>
+                <div class="mx-auto">
+                    <h5 class="text-xl font-bold text-gray-500 dark:text-gray-200 text-center ">Total Sale</h5>                        
+                    <div class="text-center pt-1">
+                    <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-green-600 rounded">$ {{booking.total_price|floatformat}}</span>
                     </div>
                 </div>
-                <div class="flex items-stretch py-8 font-medium text-blue-600 dark:text-blue-500">
-                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path><path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path></svg>                                    
-                    <div class="mx-auto">
-                        <h5 class="text-xl font-bold text-gray-900 text-gray-500 dark:text-gray-200 text-center">Income</h5>
-                        
-                        <div class="text-center pt-1">
-                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold rounded">$ {{sum_sale|floatformat}}</span>
-                        </div>
+                <div class="text-blue-600 mx-auto ml-4">
+                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd"></path></svg>                                    
+                </div>
+                <div class="mx-auto">
+                    <h5 class="text-xl font-bold text-gray-500 dark:text-gray-200 text-center ">Expense</h5>                        
+                    <div class="text-center pt-1">
+                    <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-red-600 rounded">$ {{booking.sum_expense|floatformat}}</span>
                     </div>
                 </div>
-                <div class="flex items-stretch font-medium text-blue-600 dark:text-blue-500">
+                <div class="text-blue-600 mx-auto ml-4">
+                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path><path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path></svg>                                    
+                </div>
+                <div class="mx-auto">
+                    <h5 class="text-xl font-bold text-gray-500 dark:text-gray-200 text-center ">Income</h5>                        
+                    <div class="text-center pt-1">
+                    <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-blue-600 rounded">$ {{booking.sum_sale|floatformat}}</span>
+                    </div>
+                </div>
+                <div class="text-blue-600 mx-auto ml-4">
                     <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>                                    
-                    <div class="mx-auto">
-                        <h5 class="text-xl font-bold text-gray-900 text-gray-500 dark:text-gray-200 text-center">Balance</h5>
-                        
-                        <div class="text-center pt-1">
-                            <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold rounded">$ {{sum_total|floatformat}}</span>
-                        </div>
+                </div>
+                <div class="mx-auto">
+                    <h5 class="text-xl font-bold text-gray-500 dark:text-gray-200 text-center ">Balance</h5>                        
+                    <div class="text-center pt-1">
+                    <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-green-600 rounded">$ {{booking.sum_total|floatformat}}</span>
                     </div>
                 </div>
+            
             </div>
+
+            
         </div>
         
+        <div class="grid mx-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
 
+            <div class="w-full p-2 justify-center border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
+                <canvas id="chartDoughnut2"></canvas>
+
+                <script>
+                    const dataDoughnut2 = {
+                    labels: ["Cash", "Card"],
+                    datasets: [
+                        {
+                        label: " Data",
+                        data: [{{booking.card_count}}, {{booking.cash_count}}],
+                        backgroundColor: [
+                            "rgb(255, 128, 0)",
+                            "rgb(255, 255, 0)",
+                        ],
+                        hoverOffset: 4,
+                        },
+                    ],
+                    };                
+                    const configDoughnut2 = {
+                    type: "doughnut",
+                    data: dataDoughnut2,
+                    options: {
+                        plugins: {  // 'legend' now within object 'plugins {}'
+                    legend: {
+                        labels: {
+                        color: "black",  // not 'fontColor:' anymore
+                        // fontSize: 18  // not 'fontSize:' anymore
+                        font: {
+                            size: 14// 'size' now within object 'font {}'
+                        }
+                        }
+                    }
+                },
+                    },
+                    };
+                
+                    var chartBar = new Chart(
+                    document.getElementById("chartDoughnut2"),
+                    configDoughnut2
+                    );
+                </script>
+            </div>
+            
+            
+            <div class="grid gap-2 grid-cols-2 w-full pr-4 pl-2 pt-4 pb-2 border border-gray-100 rounded-lg bg-gray-150 dark:bg-gray-400 shadow-lg shadow-blue-500/50">
+                
+                    <div class="text-blue-600 mx-auto mb-4 ml-4 text-red-600">
+                            
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+
+                            </path>
+                        </svg>                               
+                    
+                    </div>
+                    <div class="mx-auto w-full">
+                        <h5 class="text-lg font-bold text-gray-500 dark:text-gray-200 text-center ">Booking Cancel</h5>                        
+                        <div class="text-center pt-1">
+                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-red-600 rounded">{{booking.cancel}}</span>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 mx-auto mb-4 ml-4 text-red-600">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                    </div>
+                    <div class="mx-auto">
+                        <h5 class="text-lg font-bold text-gray-500 dark:text-gray-200 text-center ">Service Cancel</h5>                        
+                        <div class="text-center pt-1">
+                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-red-600 rounded">{{booking.service_cancel}}</span>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 mx-auto mb-4 ml-4 text-green-600">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                    </div>
+                    <div class="mx-auto">
+                        <h5 class="text-lg font-bold text-gray-500 dark:text-gray-200 text-center ">Payment</h5>                        
+                        <div class="text-center pt-1">
+                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-blue-600 rounded">{{booking.payment}}</span>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 mx-auto ml-4 text-blue-600">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"></path>
+                          </svg>
+                    </div>
+                    <div class="mx-auto">
+                        <h5 class="text-lg font-bold text-gray-500 dark:text-gray-200 text-center ">Total Booking</h5>                        
+                        <div class="text-center pt-1">
+                        <span class="py-1 px-2.5 text-center whitespace-nowrap align-baseline font-bold text-green-600 rounded">{{booking.booking_count}}</span>
+                        </div>
+                    </div>
+            </div>
+        </div>
     </div>
             
-
+</div>
 {% endblock content %}
