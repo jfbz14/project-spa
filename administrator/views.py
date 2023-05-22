@@ -600,10 +600,10 @@ class ListDashBoard(LoginRequiredMixin, ListView):
             query_service_serviceaditional = query_service_serviceaditional.filter(created__date_lte=data_end)
 
         else:
-            sale_all = sale_all.filter(created__date__month=datetime.now().month)    
-            expense_all = expense_all.filter(created__month=datetime.now().month) 
-            queryset_bookingspa = queryset_bookingspa.filter(created__date__month=datetime.now().month) 
-            query_service_serviceaditional = query_service_serviceaditional.filter(created__date__month=datetime.now().month)
+            sale_all = sale_all    
+            expense_all = expense_all
+            queryset_bookingspa = queryset_bookingspa 
+            query_service_serviceaditional = query_service_serviceaditional
 
         # Query sale
         sale_all_filter = sale_all.annotate(day=TruncDay('created__date')).values('day').annotate(sum_sale=Sum('price')).order_by('day')
